@@ -1,6 +1,9 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const crypto = require('crypto');
+const path = require('path');
 
 // Inisialisasi Firebase Admin SDK
 const serviceAccount = require('../serviceAccountKey.json');
@@ -11,6 +14,29 @@ admin.initializeApp({
 
 const db = admin.firestore();
 const router = express.Router();
+// Storage untuk menyimpan foto portofolio
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        // Menghasilkan nama file berdasarkan hash SHA256
+        const hash = crypto.createHash('sha256').update(file.originalname).digest('hex');
+        const fileExt = path.extname(file.originalname);
+        cb(null, `${hash}${fileExt}`);
+    }
+});
+
+// Filter untuk hanya menerima file dengan tipe gambar
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+        cb(null, true);
+    } else {
+        cb(new Error('Hanya diperbolehkan mengunggah file gambar'), false);
+    }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.get("/", (req, res)=>{
     res.json({
@@ -19,9 +45,16 @@ router.get("/", (req, res)=>{
     })
 })
 
-router.post('/daftar', async (req, res) => {
+router.post('/daftar', upload.single('profile'), async (req, res) => {
     try {
         const { email, nama, no_hp, peran, password, confirmPassword } = req.body;
+
+        // Menghasilkan URL foto portofolio
+        let profileUrl = '';
+        if (req.file) {
+            const filePath = req.file.path;
+            profileUrl = `${req.protocol}://${req.get('host')}/${filePath}`;
+        }
 
         if (!email || !nama || !no_hp || !peran || !password || !confirmPassword) {
             return res.status(400).json({ 
@@ -56,7 +89,8 @@ router.post('/daftar', async (req, res) => {
             nama,
             no_hp,
             peran,
-            password:hashedPassword
+            password:hashedPassword,
+            profile:profileUrl
         });
 
         return res.status(201).json({ 
@@ -89,26 +123,35 @@ router.get('/:email', async (req, res) => {
         const doc = await userRef.get();
 
         if (!doc.exists) {
-            return res.status(404).json({ message: 'Data user tidak ditemukan' });
+            return res.status(404).json({ status:"error", message: 'Data user tidak ditemukan' });
         }
 
         const userData = doc.data();
         return res.status(200).json(userData);
     } catch (error) {
         console.error('Error:', error);
-        return res.status(500).json({ message: 'Terjadi kesalahan saat mengambil data user' });
+        return res.status(500).json({ status:"error", message: 'Terjadi kesalahan saat mengambil data user' });
     }
 });
 
 // UPDATE data user berdasarkan email
-router.put('/update/:email', async (req, res) => {
+router.put('/update/:email', upload.single('profile'), async (req, res) => {
     try {
         const { email } = req.params;
         
-        const { newEmail, nama, peran, no_hp, password } = req.body;
+        const { nama, peran, no_hp, password } = req.body;
 
         const userRef = db.collection('users').doc(email);
         const doc = await userRef.get();
+        
+
+        // Menghasilkan URL foto portofolio
+        const userData = doc.data();
+        let profileUrl = userData.profile;
+        if (req.file) {
+            const filePath = req.file.path;
+            profileUrl = `${req.protocol}://${req.get('host')}/${filePath}`;
+        }
 
         if (!doc.exists) {
             return res.status(404).json({ 
@@ -119,11 +162,11 @@ router.put('/update/:email', async (req, res) => {
         }
 
         // Update data user
-        await userRef.update({
-            newEmail,
+        await userRef.update({ 
             nama,
             no_hp,
             peran,
+            profileUrl:profileUrl,
             password: await bcrypt.hash(password, 10) // Enkripsi ulang password
         });
 
@@ -133,6 +176,7 @@ router.put('/update/:email', async (req, res) => {
             data:email
         });
     } catch (error) {
+        const { email } = req.params;
         console.error('Error:', error);
         return res.status(500).json({ 
             status:"error",
@@ -151,16 +195,16 @@ router.delete('/delete/:email', async (req, res) => {
         const doc = await userRef.get();
 
         if (!doc.exists) {
-            return res.status(404).json({ message: 'Data user tidak ditemukan' });
+            return res.status(404).json({ status:"error", message: 'Data user tidak ditemukan' });
         }
 
         // Hapus data user
         await userRef.delete();
 
-        return res.status(200).json({ message: 'Data user berhasil dihapus' });
+        return res.status(200).json({ status:"success", message: 'Data user berhasil dihapus' });
     } catch (error) {
         console.error('Error:', error);
-        return res.status(500).json({ message: 'Terjadi kesalahan saat menghapus data user' });
+        return res.status(500).json({ status:"error", message: 'Terjadi kesalahan saat menghapus data user' });
     }
 });
 
