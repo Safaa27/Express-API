@@ -144,6 +144,13 @@ router.put('/update/:email', upload.single('profile'), async (req, res) => {
         const userRef = db.collection('users').doc(email);
         const doc = await userRef.get();
         
+        if (!doc.exists) {
+            return res.status(404).json({ 
+                status:"error",
+                message: 'Data user tidak ditemukan',
+                data:email
+            });
+        }
 
         // Menghasilkan URL foto portofolio
         const userData = doc.data();
@@ -153,22 +160,17 @@ router.put('/update/:email', upload.single('profile'), async (req, res) => {
             profileUrl = `${req.protocol}://${req.get('host')}/${filePath}`;
         }
 
-        if (!doc.exists) {
-            return res.status(404).json({ 
-                status:"error",
-                message: 'Data user tidak ditemukan',
-                data:email
-            });
-        }
+        // Memeriksa setiap nilai yang dikirim melalui req.body
+        const updatedData = {
+            nama: nama || userData.nama,
+            no_hp: no_hp || userData.no_hp,
+            peran: peran || userData.peran,
+            profile: profileUrl || userData.profile, // Gunakan nilai baru jika ada, jika tidak, gunakan nilai lama
+            password: password ? await bcrypt.hash(password, 10) : userData.password // Jika password tidak kosong, hash yang baru. Jika kosong, gunakan yang lama.
+        };
 
         // Update data user
-        await userRef.update({ 
-            nama,
-            no_hp,
-            peran,
-            profileUrl:profileUrl,
-            password: await bcrypt.hash(password, 10) // Enkripsi ulang password
-        });
+        await userRef.update(updatedData);
 
         return res.status(200).json({ 
             status:"success",
@@ -185,6 +187,7 @@ router.put('/update/:email', upload.single('profile'), async (req, res) => {
         });
     }
 });
+
 
 // DELETE data user berdasarkan email
 router.delete('/delete/:email', async (req, res) => {

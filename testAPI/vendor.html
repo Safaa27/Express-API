@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Vendor</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        margin: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Add Form -->
+      <div class="w-100 border border-1 p-3 shadow mb-5">
+        <h2 class="mb-4">Tambah Vendor</h2>
+        <form id="vendorForm">
+          <div class="form-group">
+            <label for="kontak_user">Kontak Pengguna</label>
+            <input
+              type="text"
+              class="form-control"
+              id="kontak_user"
+              name="kontak_user"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="tipe_layanan">Tipe Layanan</label><br />
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="renovasi"
+                name="tipe_layanan"
+                value="renovasi"
+              />
+              <label class="form-check-label" for="renovasi">Renovasi</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="bangun_dari_awal"
+                name="tipe_layanan"
+                value="bangun_dari_awal"
+              />
+              <label class="form-check-label" for="bangun_dari_awal"
+                >Bangun dari Awal</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="jenis_properti">Jenis Properti</label>
+            <input
+              type="text"
+              class="form-control"
+              id="jenis_properti"
+              name="jenis_properti"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="jasa_kontraktor">Jasa Kontraktor</label><br />
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="tukang"
+                name="jasa_kontraktor"
+                value="tukang"
+              />
+              <label class="form-check-label" for="tukang">Tukang</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="jasa_kontraktor"
+                name="jasa_kontraktor"
+                value="jasa_kontraktor"
+              />
+              <label class="form-check-label" for="jasa_kontraktor"
+                >Jasa Kontraktor</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lokasi_kantor">Lokasi Kantor</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lokasi_kantor"
+              name="lokasi_kantor"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="deskripsi_singkat">Deskripsi Singkat</label>
+            <textarea
+              class="form-control"
+              id="deskripsi_singkat"
+              name="deskripsi_singkat"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="portofolio">Portofolio</label>
+            <input
+              type="file"
+              class="form-control-file"
+              id="portofolio"
+              name="portofolio"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Tambah Vendor</button>
+        </form>
+      </div>
+
+      <!-- Update Form -->
+      <div class="w-100 border border-1 p-3 shadow mb-5">
+        <h2 class="mb-4 mt-4">Update Vendor</h2>
+        <form id="updateForm">
+          <div class="form-group">
+            <label for="kontak_user">ID Vendor</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id_vendor_update"
+              name="id"
+            />
+          </div>
+          <div class="form-group">
+            <label for="kontak_user">Kontak Pengguna</label>
+            <input
+              type="text"
+              class="form-control"
+              id="kontak_user"
+              name="kontak_user"
+            />
+          </div>
+          <div class="form-group">
+            <label for="tipe_layanan">Tipe Layanan</label><br />
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="update_renovasi"
+                name="tipe_layanan"
+                value="renovasi"
+              />
+              <label class="form-check-label" for="update_renovasi"
+                >Renovasi</label
+              >
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="update_bangun_dari_awal"
+                name="tipe_layanan"
+                value="bangun_dari_awal"
+              />
+              <label class="form-check-label" for="update_bangun_dari_awal"
+                >Bangun dari Awal</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="jenis_properti">Jenis Properti</label>
+            <input
+              type="text"
+              class="form-control"
+              id="jenis_properti"
+              name="jenis_properti"
+            />
+          </div>
+          <div class="form-group">
+            <label for="jasa_kontraktor">Jasa Kontraktor</label><br />
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="update_tukang"
+                name="jasa_kontraktor"
+                value="tukang"
+              />
+              <label class="form-check-label" for="update_tukang">Tukang</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="update_jasa_kontraktor"
+                name="jasa_kontraktor"
+                value="jasa_kontraktor"
+              />
+              <label class="form-check-label" for="update_jasa_kontraktor"
+                >Jasa Kontraktor</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lokasi_kantor">Lokasi Kantor</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lokasi_kantor"
+              name="lokasi_kantor"
+            />
+          </div>
+          <div class="form-group">
+            <label for="deskripsi_singkat">Deskripsi Singkat</label>
+            <textarea
+              class="form-control"
+              id="deskripsi_singkat"
+              name="deskripsi_singkat"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="portofolio">Portofolio</label>
+            <input
+              type="file"
+              class="form-control-file"
+              id="portofolio"
+              name="portofolio"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Update Vendor</button>
+        </form>
+      </div>
+
+      <!-- Delete form -->
+      <div class="w-100 border border-1 p-3 shadow mb-5">
+        <h2>Delete Vendor</h2>
+        <form id="deleteForm">
+          <div class="form-group">
+            <label for="lokasi_kantor">Id Vendor</label>
+            <input
+              type="text"
+              class="form-control"
+              id="delete_id_vendor"
+              name="id_vendor"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-danger">Delete Vendor</button>
+        </form>
+      </div>
+
+      <!-- Filter Form -->
+      <div class="w-100 border border-1 p-3 shadow mb-5">
+        <h2>Filter Tampil Data</h2>
+        <form id="filterForm">
+          <div class="form-group">
+            <label for="lokasi_kantor">Tipe Layanan</label>
+            <input
+              type="text"
+              class="form-control"
+              id="tipe_layanan"
+              name="tipe_layanan"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="lokasi_kantor">Lokasi Kantor</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lokasi_kantor"
+              name="lokasi_kantor"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="lokasi_kantor">Rating (0-5)</label>
+            <input type="text" class="form-control" id="rating" name="rating" />
+          </div>
+
+          <div class="form-group">
+            <label for="lokasi_kantor">Jenis Properti</label>
+            <input
+              type="text"
+              class="form-control"
+              id="jenis_properti"
+              name="jenis_properti"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Filter Tampilan</button>
+        </form>
+      </div>
+
+      <!-- Detail Form -->
+      <div class="w-100 border border-1 p-3 shadow">
+        <h2>detail vendor</h2>
+        <form id="searchId">
+          <div class="form-group">
+            <label for="lokasi_kantor">Id Vendor</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id_vendor"
+              name="id_vendor"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Cek Detail</button>
+        </form>
+      </div>
+
+      <hr />
+      <h2 class="mt-4">Daftar Vendor</h2>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ID Vendor</th>
+            <th>Kontak Pengguna</th>
+            <th>Tipe Layanan</th>
+            <th>Jenis Properti</th>
+            <th>Jasa Kontraktor</th>
+            <th>Lokasi Kantor</th>
+            <th>Deskripsi</th>
+            <th>Portofolio</th>
+            <th>Rating</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="vendorTableBody">
+          <!-- Data vendor akan ditampilkan di sini -->
+        </tbody>
+      </table>
+
+      <hr />
+
+      <!-- Rating Form -->
+      <div class="w-100 border border-1 p-3 shadow">
+        <h2 class="mt-4">Tambah Rating</h2>
+        <form id="ratingForm">
+          <div class="form-group">
+            <label for="rating_vendor_id">ID Vendor</label>
+            <input
+              type="text"
+              class="form-control"
+              id="rating_vendor_id"
+              name="rating_vendor_id"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="rating_value">Rating</label>
+            <input
+              type="number"
+              class="form-control"
+              id="rating_value"
+              name="rating_value"
+              min="1"
+              max="5"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Tambah Rating</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+      const baseUrl = "http://" + window.location.host + "/vendor";
+      $(document).ready(function () {
+        // Fungsi untuk menangani pengiriman form vendor
+        $("#vendorForm").submit(function (event) {
+          event.preventDefault();
+          const formData = new FormData(this);
+
+          $.ajax({
+            url: `http://${window.location.host}/vendor/add`,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              alert(response.message);
+              fetchVendors("all");
+            },
+            error: function (error) {
+              alert(error.responseJSON.message);
+            },
+          });
+        });
+
+        $("#updateForm").submit(function (event) {
+          event.preventDefault();
+          const formData = new FormData(this);
+          const id_vendor = $("#id_vendor_update").val();
+          console.log(
+            `http://${window.location.host}/delete_id_vendor/${id_vendor}`
+          );
+          console.log(id_vendor);
+
+          $.ajax({
+            url: `http://${window.location.host}/vendor/${id_vendor}`,
+            type: "PUT",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              alert(response.message);
+              fetchVendors("all");
+            },
+            error: function (error) {
+              alert(error.responseJSON.message);
+            },
+          });
+        });
+
+        $("#ratingForm").submit(function (event) {
+          event.preventDefault();
+          const ratingData = {
+            id_vendor: $("#rating_vendor_id").val(),
+            rating: $("#rating_value").val(),
+          };
+
+          $.ajax({
+            url: `http://${window.location.host}/rating/add`,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(ratingData),
+            success: function (response) {
+              alert(response.message);
+              fetchVendors("all"); // Perbarui tabel setelah menambahkan rating
+            },
+            error: function (error) {
+              alert(error.responseJSON.message);
+            },
+          });
+        });
+
+        $("#deleteForm").submit(function (event) {
+          event.preventDefault();
+          const id_vendor = $("#delete_id_vendor").val();
+
+          $.ajax({
+            url: `http://${window.location.host}/vendor/${id_vendor}`,
+            type: "DELETE",
+            success: function (response) {
+              alert(response.message);
+              fetchVendors("all"); // Perbarui tabel setelah menambahkan rating
+            },
+            error: function (error) {
+              alert(error.responseJSON.message);
+            },
+          });
+        });
+
+        // Fungsi untuk mengambil dan menampilkan data vendor
+        function fetchVendors(search, queryParams) {
+          // Menggabungkan URL dengan parameter query
+          let url = `http://${window.location.host}/vendor/${search}`;
+          if (queryParams) {
+            url += "?" + $.param(queryParams);
+          }
+          $.ajax({
+            url: url,
+            type: "GET",
+            success: function (vendors) {
+              console.log(vendors);
+              displayVendors(vendors); // Tampilkan data vendor setelah menerima respons dari server
+            },
+            error: function (error) {
+              console.log(error);
+              alert("Gagal mengambil data vendor");
+            },
+          });
+        }
+
+        // Fungsi untuk menampilkan data vendor dalam tabel
+        function displayVendors(vendors) {
+          $("#vendorTableBody").empty();
+
+          vendors.forEach(function (vendor) {
+            $("#vendorTableBody").append(`
+                <tr>
+                    <td>${vendor.id}</td>
+                    <td>${vendor.kontak_user}</td>
+                    <td>${vendor.tipe_layanan}</td>
+                    <td>${vendor.jenis_properti}</td>
+                    <td>${vendor.jasa_kontraktor}</td>
+                    <td>${vendor.lokasi_kantor}</td>
+                    <td>${vendor.deskripsi_singkat}</td>
+                    <td><a href="${vendor.portofolio}" target="_blank">${vendor.portofolio}</a></td>
+                    <td>${vendor.rating}</td>
+                    <td><button class="btn btn-info btn-sm" onclick="showRatings('${vendor.id}')">Lihat Rating</button></td>
+                </tr>
+            `);
+          });
+        }
+
+        // Fungsi untuk menampilkan rating
+        function showRatings(vendorId) {
+          $.ajax({
+            url: `http://${window.location.host}/rating/view/${vendorId}`,
+            type: "GET",
+            success: function (response) {
+              alert(`Rata-rata Rating: ${response.rating}`);
+            },
+            error: function (error) {
+              alert("Gagal mengambil rating");
+            },
+          });
+        }
+
+        // Pengambilan data awal saat halaman dimuat
+        fetchVendors("all");
+
+        // Menangani pengiriman form filter
+        $("#filterForm").submit(function (event) {
+          event.preventDefault();
+
+          // Mengambil data dari form dan mengonversinya menjadi string query
+          const formData = $(this).serialize();
+
+          // Membuat objek dari string query
+          const queryParams = {};
+          formData.split("&").forEach(function (item) {
+            const keyValue = item.split("=");
+            queryParams[keyValue[0]] = keyValue[1];
+          });
+
+          // Mengambil data vendor yang difilter
+          fetchVendors("filter", queryParams);
+        });
+        // Menangani pengiriman form pencarian berdasarkan ID
+        $("#searchId").submit(function (event) {
+          event.preventDefault();
+          const id_vendor = $("#id_vendor").val();
+          fetchVendors(id_vendor);
+        });
+      });
+    </script>
+  </body>
+</html>

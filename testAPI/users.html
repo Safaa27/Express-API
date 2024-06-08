@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body class="container mt-5">
+    <!-- Add Form -->
+    <div class="w-100 border border-1 p-3 shadow mb-5">
+      <h2 class="mb-4">User Registration</h2>
+      <form id="registerForm" class="mb-4">
+        <div class="form-group">
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="Email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="nama"
+            name="nama"
+            placeholder="Nama"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="no_hp"
+            name="no_hp"
+            placeholder="No HP"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <select class="form-control" id="peran" name="peran" required>
+            <option value="">Pilih Peran</option>
+            <option value="vendor">Vendor</option>
+            <option value="client">Client</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="file"
+            class="form-control-file"
+            id="profile"
+            name="profile"
+            accept="image/*"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+    </div>
+
+    <!-- Login Form -->
+    <div class="w-100 border border-1 p-3 shadow mb-5">
+      <h2 class="mb-4">User Login</h2>
+      <form id="loginForm" class="mb-4">
+        <div class="form-group">
+          <input
+            type="email"
+            class="form-control"
+            id="loginEmail"
+            name="email"
+            placeholder="Email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control"
+            id="loginPassword"
+            name="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+    </div>
+
+    <!-- Update Form -->
+    <div class="w-100 border border-1 p-3 shadow mb-5">
+      <h2 class="mb-4">Update User</h2>
+      <form id="updateForm" class="mb-4">
+        <div class="form-group">
+          <input
+            type="email"
+            class="form-control"
+            id="updateEmail"
+            name="email"
+            placeholder="Email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="updateNama"
+            name="nama"
+            placeholder="Nama"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="updateNo_hp"
+            name="no_hp"
+            placeholder="No HP"
+          />
+        </div>
+        <div class="form-group">
+          <select class="form-control" id="updatePeran" name="peran">
+            <option value="">Pilih Peran</option>
+            <option value="vendor">Vendor</option>
+            <option value="client">Client</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control"
+            id="updatePassword"
+            name="password"
+            placeholder="Password"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="file"
+            class="form-control-file"
+            id="updateProfile"
+            name="profile"
+            accept="image/*"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+      </form>
+    </div>
+
+    <!-- Delete Form -->
+    <div class="w-100 border border-1 p-3 shadow mb-5">
+      <h2 class="mb-4">Delete User</h2>
+      <form id="deleteForm" class="mb-4">
+        <div class="form-group">
+          <input
+            type="email"
+            class="form-control"
+            id="deleteEmail"
+            name="email"
+            placeholder="Email"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+
+    <!-- Get Data Form -->
+    <div class="w-100 border border-1 p-3 shadow mb-5">
+      <h2 class="mb-4">Get User Data</h2>
+      <form id="getForm" class="mb-4">
+        <div class="form-group">
+          <input
+            type="email"
+            class="form-control"
+            id="getEmail"
+            name="email"
+            placeholder="Email (leave blank to get all users)"
+          />
+        </div>
+        <button type="submit" id="getData" class="btn btn-primary">
+          Get Data
+        </button>
+      </form>
+    </div>
+
+    <h2 class="mb-4">User Data</h2>
+    <table id="userTable" class="table table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>Email</th>
+          <th>Nama</th>
+          <th>No HP</th>
+          <th>Peran</th>
+          <th>Profile URL</th>
+          <th>Password (Terenkripsi)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      $(document).ready(function () {
+        const baseUrl = "http://" + window.location.host + "/users"; // Update this with your actual base URL
+
+        // User Registration
+        $("#registerForm").on("submit", function (e) {
+          e.preventDefault();
+          let formData = new FormData(this);
+
+          $.ajax({
+            url: `${baseUrl}/daftar`,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+              console.log(data);
+              document.getElementById("getData").click();
+              alert(data.message);
+            },
+            error: function (jqXHR) {
+              console.log(baseUrl);
+              console.log(jqXHR.responseJSON);
+              alert(jqXHR.responseJSON);
+            },
+          });
+        });
+
+        // User Login
+        $("#loginForm").on("submit", function (e) {
+          e.preventDefault();
+          let loginData = {
+            email: $("#loginEmail").val(),
+            password: $("#loginPassword").val(),
+          };
+
+          $.ajax({
+            url: `${baseUrl}/auth`,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(loginData),
+            success: function (data) {
+              console.log(data);
+              document.getElementById("getData").click();
+              alert(data.message);
+            },
+            error: function (jqXHR) {
+              console.log(jqXHR.responseJSON);
+              alert(jqXHR.responseJSON);
+            },
+          });
+        });
+
+        // Update User
+        $("#updateForm").on("submit", function (e) {
+          e.preventDefault();
+          let email = $("#updateEmail").val();
+          let formData = new FormData(this);
+
+          $.ajax({
+            url: `${baseUrl}/update/${email}`,
+            type: "PUT",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+              console.log(data);
+              document.getElementById("getData").click();
+              alert(data.message);
+            },
+            error: function (jqXHR) {
+              console.log(jqXHR.responseJSON);
+              alert(jqXHR.responseJSON);
+            },
+          });
+        });
+
+        // Delete User
+        $("#deleteForm").on("submit", function (e) {
+          e.preventDefault();
+          let email = $("#deleteEmail").val();
+
+          $.ajax({
+            url: `${baseUrl}/delete/${email}`,
+            type: "DELETE",
+            success: function (data) {
+              console.log(data);
+              document.getElementById("getData").click();
+              alert(data.message);
+            },
+            error: function (jqXHR) {
+              console.log(jqXHR.responseJSON);
+              alert(jqXHR.responseJSON);
+            },
+          });
+        });
+
+        // Get User Data
+        $("#getForm").on("submit", function (e) {
+          e.preventDefault();
+          let email = $("#getEmail").val();
+          let url = email ? `${baseUrl}/${email}` : `${baseUrl}/all`;
+
+          $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+              console.log(data);
+              let userTable = $("#userTable tbody");
+              userTable.empty();
+
+              if (Array.isArray(data)) {
+                data.forEach((user) => {
+                  userTable.append(
+                    `<tr>
+                                        <td>${user.email}</td>
+                                        <td>${user.nama}</td>
+                                        <td>${user.no_hp}</td>
+                                        <td>${user.peran}</td>
+                                        <td><a href="${user.profile}" target="_blank">${user.profile}</a></td>
+                                        <td>${user.password}</td>
+                                        </tr>`
+                  );
+                });
+              } else {
+                userTable.append(
+                  `<tr>
+                                    <td>${data.email}</td>
+                                    <td>${data.nama}</td>
+                                    <td>${data.no_hp}</td>
+                                    <td>${data.peran}</td>
+                                    <td><a href="${data.profile}" target="_blank">${data.profile}</a></td>
+                                </tr>`
+                );
+              }
+            },
+            error: function (jqXHR) {
+              console.log(jqXHR.responseJSON);
+              alert(jqXHR.responseJSON);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
