@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const fs = require('fs');
 const csv = require('csv-parser');
 const { v4: uuidv4 } = require('uuid');
-const { SimpleLinearRegression } = require('ml-regression');
+
 
 const db = admin.firestore();
 const router = express.Router();
@@ -27,7 +27,6 @@ const parseCsv = async (filePath) => {
 };
 
 const calculateDistance = (row, params) => {
-    // Menghitung jarak Euclidean antara baris data dan nilai parameter pengguna
     const distance = Math.sqrt(
         Math.pow(row['jumlah_lantai'] - params.jumlah_lantai, 2) +
         Math.pow(row['kamar_tidur'] - params.kamar_tidur, 2) +
@@ -40,38 +39,25 @@ const calculateDistance = (row, params) => {
     return distance;
 };
 
-// Fungsi untuk menghitung estimasi harga berdasarkan input pengguna menggunakan Simple Linear Regression
 const calculateEstimatedPrice = async (params) => {
     const data = await parseCsv('./dataset/datasetprice.csv');
-    
-    // Hitung jarak untuk setiap baris data
-    const distances = data.map(row => {
-        return {
-            row,
-            distance: calculateDistance(row, params)
-        };
-    });
 
-    // Urutkan berdasarkan jarak terdekat hingga terjauh
+    const distances = data.map(row => ({
+        row,
+        distance: calculateDistance(row, params)
+    }));
+
     distances.sort((a, b) => a.distance - b.distance);
-
-    // Pisahkan data menjadi kelompok
     const closestRows = distances.slice(0, 3).map(({ row }) => row);
 
-    // Menggabungkan hasil dari setiap kelompok
-    const selectedResults = closestRows;
+    const minRow = closestRows.reduce((prev, curr) => parseFloat(prev['price_value']) < parseFloat(curr['price_value']) ? prev : curr);
+    const maxRow = closestRows.reduce((prev, curr) => parseFloat(prev['price_value']) > parseFloat(curr['price_value']) ? prev : curr);
 
-    // Tentukan rentang harga
-    const minRow = selectedResults.reduce((prev, curr) => parseFloat(prev['price_value']) < parseFloat(curr['price_value']) ? prev : curr);
-    const maxRow = selectedResults.reduce((prev, curr) => parseFloat(prev['price_value']) > parseFloat(curr['price_value']) ? prev : curr);
-
-    // Ambil mata uang dan unit harga dari baris data terdekat
     const currencyMin = minRow['price_currency'];
     const unitMin = minRow['price_unit'];
     const currencyMax = maxRow['price_currency'];
     const unitMax = maxRow['price_unit'];
 
-    // Tentukan rentang harga dengan mata uang dan unit yang sesuai
     const minPrice = parseFloat(minRow['price_value']);
     const maxPrice = parseFloat(maxRow['price_value']);
     const priceRange = `${currencyMin}. ${minPrice.toFixed(2)} ${unitMin} - ${currencyMax}. ${maxPrice.toFixed(2)} ${unitMax}`;
@@ -79,12 +65,14 @@ const calculateEstimatedPrice = async (params) => {
     return priceRange;
 };
 
-
-// Endpoint untuk estimasi harga
 router.post('/estimate', async (req, res) => {
     try {
         const { jumlah_lantai, kamar_tidur, kamar_mandi, luas_bangunan, luas_tanah, jumlah_carport, jumlah_garage } = req.body;
 
+        console.log(jumlah_lantai, kamar_tidur, kamar_mandi, luas_bangunan, luas_tanah, jumlah_carport, jumlah_garage);
+        if (jumlah_lantai == undefined && kamar_tidur == undefined && kamar_mandi == undefined && luas_bangunan == undefined && luas_tanah == undefined && jumlah_carport == undefined && jumlah_garage == undefined) {
+            return res.status(200).json({ status: 'error', "estimatedPrice": "Rp. 0" });
+        }
         const estimatedPrice = await calculateEstimatedPrice({
             jumlah_lantai,
             kamar_tidur,
